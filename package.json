@@ -1,0 +1,14 @@
+{
+  "name": "project_5-neighbourhood",
+  "version": "1.0.0",
+  "description": "Udacity Project 5 ",
+  "main": "gulpFile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kunle Ogunjimi",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp-sass": "^2.2.0"
+  }
+}
