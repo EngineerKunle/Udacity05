@@ -1,0 +1,1 @@
+function initMap(){map=new google.maps.Map(document.getElementById("map"),{center:bexleyMap,zoom:15})}var map,bexleyMap=new google.maps.LatLng(51.504,.1261);initMap();

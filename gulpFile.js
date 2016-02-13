@@ -1,7 +1,8 @@
 "use strict";
 
-var gulp = require('gulp'),
-   sass = require('gulp-sass');
+var gulp     = require('gulp'),
+   sass      = require('gulp-sass'),
+   uglify  = require('gulp-uglify') ;
 
 
 //sass compile
@@ -23,9 +24,16 @@ gulp.task('copyJs', function () {
 
 gulp.task('watch', function () {
    //watch sass files
-   gulp.watch('src/scss/*.scss', ['sass']);
+   gulp.watch(['src/scss/*.scss','index.html'], ['sass','copyJs','compress']);
 
 });
 
+//below is the compress task for Javascript
+gulp.task('compress', function() {
+  return gulp.src('src/js/app.js')
+    .pipe(uglify())
+    .pipe(gulp.dest('dist/js/'));
+});
+
 //task
-gulp.task('default', ['sass','copyJS', 'watch']);
+gulp.task('dev', ['sass','copyJs','compress', 'watch']);
