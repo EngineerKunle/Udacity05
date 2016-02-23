@@ -1,1 +1,1 @@
-function initMap(){map=new google.maps.Map(document.getElementById("map"),{center:bexleyMap,zoom:15})}var map,bexleyMap=new google.maps.LatLng(51.504,.1261);initMap();
+var MapViewModel=function(){function e(){n=new google.maps.Map(document.getElementById("map"),{center:o,zoom:15})}var n,o=new google.maps.LatLng(51.4589,.1384);e()};ko.applyBindings(MapViewModel());

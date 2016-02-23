@@ -2,7 +2,8 @@
 
 var gulp     = require('gulp'),
    sass      = require('gulp-sass'),
-   uglify  = require('gulp-uglify') ;
+   uglify  = require('gulp-uglify'),
+    gutil = require('gulp-util');
 
 
 //sass compile
@@ -31,7 +32,7 @@ gulp.task('watch', function () {
 //below is the compress task for Javascript
 gulp.task('compress', function() {
   return gulp.src('src/js/app.js')
-    .pipe(uglify())
+    .pipe(uglify().on('error', gutil.log))
     .pipe(gulp.dest('dist/js/'));
 });
 
