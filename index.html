@@ -3,19 +3,34 @@
 <head>
     <meta charset="utf-8">
     <title>Map</title>
-    <meta>
-    <meta name="neighbourhood map" content="Lorem Ipsum Map">
+    <meta name="neighbourhood map" content="Map of Bexley">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" type="text/css" href="dist/css/style.css">
-    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
-    <script type="text/javascript" src="dist/libs/jQuery.js" async></script>
-    <script type="text/javascript" src="dist/libs/knockout-3.4.0.js" async></script>
-    <script type="text/javascript" src="dist/js/app.js" async></script>
+    <link rel="stylesheet" type="text/css" href="bootstrap/bootstrap.min.css">
 </head>
 
 <body>
-    <div id="map"></div>
+    <div class="container">
 
+        <h2 class="text-center">Neighbourhood Map Project 5</h2>
+        <div class="searchBar col-xs-6 col-md-4">
 
+            <input type="text" autocomplete="off" placeholder="Search" data-bind="value: search, valueUpdate: 'keyup'">
+            <ul data-bind="foreach: filterPins" class="list">
+                <li data-bind="text: name"></li>
+            </ul>
+        </div>
+        <div id="map" class="col-xs-12 col-sm-6 col-md-8">
+        </div>
+
+    </div>
+
+    <!--Scripts -->
+    <script type="text/javascript" src="dist/libs/jquery.min.js"></script>
+    <script type="text/javascript" src="dist/libs/knockout-3.4.0.js"></script>
+    <script async defer onerror="mapError" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDCzmwuKJYiHVZxuAQBXzI8su2qo3urTCI&signed_in=true&callback=initApp">
+    </script>
+    <script type="text/javascript" src="dist/js/app.js"></script>
 </body>
 
 </html>

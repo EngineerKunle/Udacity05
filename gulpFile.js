@@ -25,7 +25,7 @@ gulp.task('copyJs', function () {
 
 gulp.task('watch', function () {
    //watch sass files
-   gulp.watch(['src/scss/*.scss','index.html'], ['sass','copyJs','compress']);
+   gulp.watch(['src/scss/*.scss','index.html','src/js/app.js'], ['sass','copyJs','compress']);
 
 });
 
