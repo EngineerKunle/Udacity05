@@ -61,8 +61,8 @@ var foursquare = function (data, callback) {
     var clientId = "O2MRPCSYIDAFMNVONXF5YSNVB3N3FYCY4DISAIQHA4BKLTAO";
     var clientSecret = "XBRXY4EZI1CPPX5ZG3OS3FHQWJQBYWIHKCIMIKPIOVMKX4RM";
     var foursquareUrl = "https://api.foursquare.com/v2/venues/search?ll=51.45889,0.13946&query="+data.place+"&client_id=" + clientId + '&client_secret=' + clientSecret + "&v=20160309";
-    console.log(foursquareUrl);
-    console.log(data.place);
+//    console.log(foursquareUrl);
+//    console.log(data.place);
 
     $.ajax({
         url: foursquareUrl,
@@ -72,8 +72,9 @@ var foursquare = function (data, callback) {
             callback(null, data);
         },
         error: function (e) {
+            //here we are handling errors incase foursquare fails
             callback(e);
-            console.log("failed to load foursquare");
+            alert("failed to load foursquare");
         }
     });
     
@@ -106,12 +107,13 @@ function placedMarker(place, lat, lng, description) {
         if(e){
             alert("foursquare failed");
         }else{
-            console.log(data.response.venues[0].location.postalCode, " success");
+            //console.log(data.response.venues[0].location.postalCode, " success");
             self.postCode = data.response.venues[0].location.postalCode;
             self.infoWindow.setContent(self.description+ '<br">' + '<p style="text-align:center"> Foursquare says this is the postcode '+self.postCode+" </p>");
         }
     });
     
+    //when users click on the marker display relevant info
     marker.addListener('click', function () {
         self.infoWindow.open(map, marker);
         marker.setAnimation(google.maps.Animation.BOUNCE);
@@ -124,6 +126,7 @@ function placedMarker(place, lat, lng, description) {
     return marker;
 }
 
+//View models to handle our data
 var MapViewModel = function () {
     initMap();
     //keep track of "this" in a variable
@@ -180,6 +183,7 @@ var MapViewModel = function () {
 
 var newModel;
 
+//initilises the app once google maps has finished loads
 function initApp() {
     newModel = new MapViewModel();
     //foursquare();
