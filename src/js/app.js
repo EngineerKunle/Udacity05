@@ -1,38 +1,45 @@
 //global variables
 var map;
+
+
 //list 5 locations
 var locations = [
     {
         name: 'Asda',
         lat: 51.45889,
-        lng: 0.13946
+        lng: 0.13946,
+        description: "Asda - Place to shop"
     },
     {
         name: 'National Trust: The Red House',
         lat: 51.45556,
-        lng: 0.12954
+        lng: 0.12954,
+        description: "The Red House - The Red House"
     },
     {
         name: 'Broadway Shopping Centre',
         lat: 51.45612,
-        lng: 0.14616
+        lng: 0.14616,
+        description: "Broadway Shopping Centre - Bexley Shopping mall"
     },
     {
         name: 'Danson Park',
         lat: 51.45577,
-        lng: 0.12258
+        lng: 0.12258,
+        description: "Danson Park - Have fun in the park"
     },
     {
         name: 'Bexley Train Station',
         lat: 51.46346,
-        lng: 0.13381
+        lng: 0.13381,
+        description: "Bexley Train Station - Off to a new city"
     }
 ];
 
 //this is to help if Maps failed to load.
 function mapError(e) {
     alert("Google map failed to load");
-}
+};
 
 //initialse our Map
 function initMap() {
@@ -46,13 +53,39 @@ function initMap() {
         center: bexleyMap,
         zoom: 14
     });
-}
+};
+
+//foursquare details
+var foursquare = function (data, callback) {
+    //foursqaure
+    var clientId = "O2MRPCSYIDAFMNVONXF5YSNVB3N3FYCY4DISAIQHA4BKLTAO";
+    var clientSecret = "XBRXY4EZI1CPPX5ZG3OS3FHQWJQBYWIHKCIMIKPIOVMKX4RM";
+    var foursquareUrl = "https://api.foursquare.com/v2/venues/search?ll=51.45889,0.13946&query="+data.place+"&client_id=" + clientId + '&client_secret=' + clientSecret + "&v=20160309";
+    console.log(foursquareUrl);
+    console.log(data.place);
+
+    $.ajax({
+        url: foursquareUrl,
+        dataType: 'json',
+        data:"",
+        success: function (data) {
+            callback(null, data);
+        },
+        error: function (e) {
+            callback(e);
+            console.log("failed to load foursquare");
+        }
+    });
+    
+};
 
 //helped with marking each points specified
-function placedMarker(place, lat, lng) {
-    this.place = place;
-    this.lat = lat;
-    this.lng = lng;
+function placedMarker(place, lat, lng, description) {
+    var self = this; 
+    self.place = place;
+    self.lat = lat;
+    self.lng = lng;
+    self.description = description;
 
     var marker = new google.maps.Marker({
         position: {
@@ -63,6 +96,30 @@ function placedMarker(place, lat, lng) {
         map: map,
         animation: google.maps.Animation.DROP
     });
+
+    self.infoWindow = new google.maps.InfoWindow({
+        content: self.description
+    });
+    
+    foursquare(self, function(e, data){
+        
+        if(e){
+            alert("foursquare failed");
+        }else{
+            console.log(data.response.venues[0].location.postalCode, " success");
+            self.postCode = data.response.venues[0].location.postalCode;
+            self.infoWindow.setContent(self.description+ '<br">' + '<p style="text-align:center"> Foursquare says this is the postcode '+self.postCode+" </p>");
+        }
+    });
+    
+    marker.addListener('click', function () {
+        self.infoWindow.open(map, marker);
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+        setTimeout(function () {
+            marker.setAnimation(null);
+        }, 2000);
+    });
+
 
     return marker;
 }
@@ -76,22 +133,23 @@ var MapViewModel = function () {
     self.locationsArray = ko.observableArray(locations);
 
     //here is to clear the markers
-    self.clearMarkers = function(){
-      for (var i = 0; i < self.markers.length; i++) {
-        // console.log();
-        self.markers[i].setMap(null);
-      }
-      self.markers = [];
+    self.clearMarkers = function () {
+        for (var i = 0; i < self.markers.length; i++) {
+            // console.log();
+            self.markers[i].setMap(null);
+        }
+        self.markers = [];
     };
 
     //with query result place new markers
-    self.syncMarkers = function(locations){
+    self.syncMarkers = function (locations) {
         var locs = locations || self.locationsArray();
-        locs.forEach(function(locs){
-            var pin = new placedMarker(locs.name, locs.lat, locs.lng);
+        locs.forEach(function (locs) {
+            var pin = new placedMarker(locs.name, locs.lat, locs.lng, locs.description);
             self.markers.push(pin);
         });
     };
+
 
 
     //query search result
@@ -124,5 +182,6 @@ var newModel;
 
 function initApp() {
     newModel = new MapViewModel();
+    //foursquare();
     ko.applyBindings(newModel);
 }
