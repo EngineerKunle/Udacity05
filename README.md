@@ -20,4 +20,14 @@ Errors are all handled for each api.
 - Bootstrap
 - Gulp js
 
-Can be run using local server set up like MAMP.
+#Set up
+
+1) Download and install Mamp
+
+2) Clone this repo and set the directory as the mamp server.
+
+3) On success of Mamp being run, open index.html, map should run without issues or error is logged.
+
+4) In the search bar, here you can fiter the 5 locations and map is updated.
+
+

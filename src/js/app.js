@@ -90,8 +90,8 @@ function placedMarker(place, lat, lng, description) {
 
     var marker = new google.maps.Marker({
         position: {
-            lat: this.lat,
-            lng: this.lng
+            lat: self.lat,
+            lng: self.lng
         },
         title: name,
         map: map,
@@ -150,9 +150,14 @@ var MapViewModel = function () {
         locs.forEach(function (locs) {
             var pin = new placedMarker(locs.name, locs.lat, locs.lng, locs.description);
             self.markers.push(pin);
+            console.log(pin);
         });
     };
 
+//    self.listInfo = function(){
+//      
+//        console.log("it has clicked");
+//    };
 
 
     //query search result
