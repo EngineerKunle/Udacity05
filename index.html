@@ -17,7 +17,7 @@
 
             <input type="text" autocomplete="off" placeholder="Search" data-bind="value: search, valueUpdate: 'keyup'">
             <ul data-bind="foreach: filterPins" class="list">
-                <li data-bind="text: name">
+                <li data-bind="text: name, click: $parent.listInfo.bind($data, $index())">
                 </li>
             </ul>
         </div>

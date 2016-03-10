@@ -60,14 +60,14 @@ var foursquare = function (data, callback) {
     //foursqaure
     var clientId = "O2MRPCSYIDAFMNVONXF5YSNVB3N3FYCY4DISAIQHA4BKLTAO";
     var clientSecret = "XBRXY4EZI1CPPX5ZG3OS3FHQWJQBYWIHKCIMIKPIOVMKX4RM";
-    var foursquareUrl = "https://api.foursquare.com/v2/venues/search?ll=51.45889,0.13946&query="+data.place+"&client_id=" + clientId + '&client_secret=' + clientSecret + "&v=20160309";
-//    console.log(foursquareUrl);
-//    console.log(data.place);
+    var foursquareUrl = "https://api.foursquare.com/v2/venues/search?ll=51.45889,0.13946&query=" + data.place + "&client_id=" + clientId + '&client_secret=' + clientSecret + "&v=20160309";
+    //    console.log(foursquareUrl);
+    //    console.log(data.place);
 
     $.ajax({
         url: foursquareUrl,
         dataType: 'json',
-        data:"",
+        data: "",
         success: function (data) {
             callback(null, data);
         },
@@ -77,12 +77,12 @@ var foursquare = function (data, callback) {
             alert("failed to load foursquare");
         }
     });
-    
+
 };
 
 //helped with marking each points specified
 function placedMarker(place, lat, lng, description) {
-    var self = this; 
+    var self = this;
     self.place = place;
     self.lat = lat;
     self.lng = lng;
@@ -101,29 +101,37 @@ function placedMarker(place, lat, lng, description) {
     self.infoWindow = new google.maps.InfoWindow({
         content: self.description
     });
-    
-    foursquare(self, function(e, data){
-        
-        if(e){
+
+    foursquare(self, function (e, data) {
+
+        if (e) {
             alert("foursquare failed");
-        }else{
+        } else {
             //console.log(data.response.venues[0].location.postalCode, " success");
             self.postCode = data.response.venues[0].location.postalCode;
-            self.infoWindow.setContent(self.description+ '<br">' + '<p style="text-align:center"> Foursquare says this is the postcode '+self.postCode+" </p>");
+            self.infoWindow.setContent(self.description + '<br">' + '<p style="text-align:center"> Foursquare says this is the postcode ' + self.postCode + " </p>");
         }
     });
-    
-    //when users click on the marker display relevant info
-    marker.addListener('click', function () {
-        self.infoWindow.open(map, marker);
-        marker.setAnimation(google.maps.Animation.BOUNCE);
-        setTimeout(function () {
-            marker.setAnimation(null);
-        }, 2000);
-    });
 
 
-    return marker;
+
+    self.animateMarker = function () {
+        //when users click on the marker display relevant info
+        marker.addListener('click', function () {
+            self.infoWindow.open(map, marker);
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+            setTimeout(function () {
+                marker.setAnimation(null);
+            }, 2000);
+        });
+    }
+
+
+    self.animateMarker();
+    return {
+        marker: marker,
+        infoWindow: self.infoWindow
+    };
 }
 
 //View models to handle our data
@@ -150,14 +158,25 @@ var MapViewModel = function () {
         locs.forEach(function (locs) {
             var pin = new placedMarker(locs.name, locs.lat, locs.lng, locs.description);
             self.markers.push(pin);
-            console.log(pin);
+            // console.log(pin);
         });
     };
 
-//    self.listInfo = function(){
-//      
-//        console.log("it has clicked");
-//    };
+
+
+    self.listInfo = function (index) {
+        //console.log(index);
+        var bounce = self.markers[index].marker;
+            bounce.setAnimation(google.maps.Animation.BOUNCE);
+            setTimeout(function () {
+                bounce.setAnimation(null);
+            }, 2000);
+        //console.log(bounce);
+        //bounce.animateMarker();
+        var infoWindow = self.markers[index].infoWindow;
+        infoWindow.open(map, self.markers[index].marker);
+        
+    }
 
 
     //query search result
