@@ -121,8 +121,10 @@ function placedMarker(place, lat, lng, description) {
             self.infoWindow.open(map, marker);
             marker.setAnimation(google.maps.Animation.BOUNCE);
             setTimeout(function () {
+                //console.log("infowindo off");
                 marker.setAnimation(null);
-            }, 2000);
+                self.infoWindow.close();
+            }, 5000);
         });
     }
 
@@ -175,6 +177,7 @@ var MapViewModel = function () {
         //bounce.animateMarker();
         var infoWindow = self.markers[index].infoWindow;
         infoWindow.open(map, self.markers[index].marker);
+        setTimeout(function () { infoWindow.close(); }, 5000);
         
     }
 
